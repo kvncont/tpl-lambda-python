@@ -1,0 +1,51 @@
+name: Release
+
+run-name: Release [${{ github.event.release.tag_name }}]
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    uses: kvncont/gh-workflows/.github/workflows/python-ci.yml@main
+    with:
+      python-version: 3.14
+      zip-name: lambda-${{ github.event.release.tag_name }}.zip
+      artifact-name: lambda-${{ github.event.release.tag_name }}
+      run-tests: false
+      run-linting: false
+
+  upload-to-gh-release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: lambda-${{ github.event.release.tag_name }}
+          path: ./dist
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./dist/*.zip
+
+  upload-to-aws-s3:
+    needs: build
+    strategy:
+      matrix:
+        environment: [DEV, QA]
+    uses: kvncont/gh-workflows/.github/workflows/aws-s3-upload.yml@main
+    with:
+      environment: ${{ matrix.environment }}
+      aws-region: us-east-1
+      s3-bucket: kvncont-artifacts
+      s3-prefix: releases/${{ matrix.environment }}/${{ github.event.repository.name }}/${{ github.event.release.tag_name }}
+      artifact-name: lambda-${{ github.event.release.tag_name }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
