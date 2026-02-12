@@ -1,0 +1,54 @@
+{
+    "name": "Lambda",
+    "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
+    "features": {
+        "ghcr.io/devcontainers/features/aws-cli:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "Postman.postman-for-vscode",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ms-python.pylint"
+            ],
+            "settings": {
+                "editor.bracketPairColorization.enabled": true,
+                "editor.insertSpaces": true,
+                "editor.detectIndentation": false,
+                "editor.tabSize": 4,
+                "files.encoding": "utf8",
+                "terminal.integrated.scrollback": 20000,
+                "python.languageServer": "Pylance",
+                "[jsonc]": {
+                    "editor.defaultFormatter": "vscode.json-language-features",
+                    "editor.tabSize": 4
+                },
+                "[python]": {
+                    "editor.defaultFormatter": "ms-python.black-formatter",
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": "explicit",
+                        "source.unusedImports": "explicit"
+                    },
+                    "editor.tabSize": 4
+                },
+                "isort.args": [
+                    "--profile",
+                    "black"
+                ]
+            }
+        }
+    },
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/gh,target=/home/vscode/.config/gh,type=bind,consistency=cached"
+    ],
+    "postCreateCommand": "pip install --upgrade pip && pip install aws-sam-cli --upgrade && pip install -r requirements-dev.txt"
+}
