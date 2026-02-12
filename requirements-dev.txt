@@ -1,0 +1,13 @@
+# Development dependencies
+# Install with: pip install -r requirements-dev.txt
+
+# Include production dependencies
+-r requirements.txt
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=3.0.0
+
+# AWS SDKs for testing with AWS services (included in lambda runtime)
+boto3>=1.0.0
+botocore>=1.0.0
