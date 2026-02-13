@@ -1,4 +1,4 @@
-name: Deploy - DEV
+name: Deploy - PROD
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ jobs:
   prepare-deploy:
     uses: kvncont/gh-workflows/.github/workflows/get-version-from-yaml.yml@main
     with:
-      config-file: config/dev.yml
+      config-file: config/prod.yml
 
   download-from-s3:
     needs: prepare-deploy
@@ -16,25 +16,26 @@ jobs:
       aws-region: ${{ vars.AWS_PRIMARY_REGION || 'us-east-1' }}
       aws-role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME || '' }}
       s3-bucket: ${{ vars.BUCKET_NAME || github.repository_owner }}-artifacts
-      s3-prefix: releases/dev/${{ github.event.repository.name }}/${{ needs.prepare-deploy.outputs.version }}
+      s3-prefix: releases/${{ github.event.repository.name }}/${{ needs.prepare-deploy.outputs.version }}
       s3-file: ${{ vars.LAMBDA_NAME || github.event.repository.name }}-${{ needs.prepare-deploy.outputs.version }}.zip
       artifact-name: ${{ vars.LAMBDA_NAME || github.event.repository.name }}-${{ needs.prepare-deploy.outputs.version }}
     secrets:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  deploy-dev:
+  deploy-prod:
     needs: 
       - prepare-deploy
       - download-from-s3
     uses: kvncont/gh-workflows/.github/workflows/aws-lambda-cd.yml@main
     with:
+      environment: prod
       aws-region: ${{ vars.AWS_PRIMARY_REGION || 'us-east-1' }}
       aws-role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME || '' }}
-      lambda-name: ${{ vars.LAMBDA_NAME || github.event.repository.name }}-dev
+      lambda-name: ${{ vars.LAMBDA_NAME || github.event.repository.name }}-prod
       artifact-name: ${{ vars.LAMBDA_NAME || github.event.repository.name }}-${{ needs.prepare-deploy.outputs.version }}
       zip-file: ${{ vars.LAMBDA_NAME || github.event.repository.name }}-${{ needs.prepare-deploy.outputs.version }}.zip
-      env-file: config/dev.yml
+      env-file: config/prod.yml
       version-description: "Deploy Release: ${{ needs.prepare-deploy.outputs.version }}"
     secrets:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
