@@ -1,56 +1,110 @@
 {
-    "name": "Lambda",
-    "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
-    "features": {
-        "ghcr.io/devcontainers/features/aws-cli:1": {},
-        "ghcr.io/devcontainers/features/github-cli:1": {},
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-    },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "Postman.postman-for-vscode",
-                "GitHub.copilot",
-                "GitHub.copilot-chat",
-                "ms-python.python",
-                "ms-python.black-formatter",
-                "ms-python.isort",
-                "ms-python.pylint",
-                "GitHub.vscode-github-actions",
-                "GitHub.codespaces"
+  "name": "Lambda",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Postman.postman-for-vscode",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.pylint",
+        "GitHub.vscode-github-actions",
+        "GitHub.codespaces"
+      ],
+      "mcp": {
+        "servers": {
+          "github": {
+            "type": "http",
+            "url": "https://api.githubcopilot.com/mcp/"
+          },
+          "aws-mcp": {
+            "command": "uvx",
+            "args": [
+              "mcp-proxy-for-aws@latest",
+              "https://aws-mcp.us-east-1.api.aws/mcp"
             ],
-            "settings": {
-                "editor.bracketPairColorization.enabled": true,
-                "editor.insertSpaces": true,
-                "editor.detectIndentation": false,
-                "editor.tabSize": 4,
-                "files.encoding": "utf8",
-                "terminal.integrated.scrollback": 20000,
-                "python.languageServer": "Pylance",
-                "[jsonc]": {
-                    "editor.defaultFormatter": "vscode.json-language-features",
-                    "editor.tabSize": 4
-                },
-                "[python]": {
-                    "editor.defaultFormatter": "ms-python.black-formatter",
-                    "editor.formatOnSave": true,
-                    "editor.codeActionsOnSave": {
-                        "source.organizeImports": "explicit",
-                        "source.unusedImports": "explicit"
-                    },
-                    "editor.tabSize": 4
-                },
-                "isort.args": [
-                    "--profile",
-                    "black"
-                ]
+            "type": "stdio"
+          },
+          "awslabs.aws-serverless-mcp-server": {
+            "command": "uvx",
+            "args": [
+              "awslabs.aws-serverless-mcp-server@latest",
+              "--allow-sensitive-data-access"
+            ],
+            "env": {
+              "AWS_REGION": "us-east-1"
+            },
+            "disabled": false,
+            "autoApprove": []
+          },
+          "awslabs.dynamodb-mcp-server": {
+            "command": "uvx",
+            "args": [
+              "awslabs.dynamodb-mcp-server@latest"
+            ],
+            "env": {
+              "FASTMCP_LOG_LEVEL": "ERROR"
+            },
+            "disabled": false,
+            "autoApprove": []
+          },
+          "awslabs.amazon-sns-sqs-mcp-server": {
+            "command": "uvx",
+            "args": [
+              "awslabs.amazon-sns-sqs-mcp-server@latest"
+            ],
+            "env": {
+              "AWS_REGION": "us-east-1"
             }
-        }
-    },
-    "mounts": [
-        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
-        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
-        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/gh,target=/home/vscode/.config/gh,type=bind,consistency=cached"
-    ],
-    "postCreateCommand": "pip install --upgrade pip && pip install aws-sam-cli --upgrade && pip install -r requirements-dev.txt && curl -Ls https://astral.sh/uv/install.sh | sh"
+          }
+        },
+        "inputs": []
+      },
+      "settings": {
+        "editor.bracketPairColorization.enabled": true,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.tabSize": 4,
+        "chat.mcp.autostart": "newAndOutdated",
+        "files.encoding": "utf8",
+        "terminal.integrated.scrollback": 20000,
+        "python.languageServer": "Pylance",
+        "[json]": {
+          "editor.defaultFormatter": "vscode.json-language-features",
+          "editor.tabSize": 2
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "vscode.json-language-features",
+          "editor.tabSize": 2
+        },
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.unusedImports": "explicit"
+          },
+          "editor.tabSize": 4
+        },
+        "isort.args": [
+          "--profile",
+          "black"
+        ]
+      }
+    }
+  },
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/gh,target=/home/vscode/.config/gh,type=bind,consistency=cached"
+  ],
+  "postCreateCommand": "pip install --upgrade pip && pip install aws-sam-cli --upgrade && pip install -r requirements-dev.txt && curl -Ls https://astral.sh/uv/install.sh | sh"
 }
