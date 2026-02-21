@@ -80,7 +80,10 @@
               "type": "pickString",
               "description": "Selecciona el archivo de evento para invocar la Lambda",
               "options": [
-                "events/cloudwatch-scheduled-event.json"
+                "events/api-gateway-event.json",
+                "events/cloudwatch-scheduled-event.json",
+                "events/dynamodb-event.json",
+                "events/s3-event.json"
               ],
               "default": "events/cloudwatch-scheduled-event.json"
             }
