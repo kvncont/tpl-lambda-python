@@ -52,6 +52,17 @@ pip install -r requirements-dev.txt
   ```
   Ejecuta la función Lambda usando un evento de ejemplo.
 
+  **O puedes usar el task de VS Code para invocar la Lambda fácilmente:**
+    1. Abre la paleta de comandos:
+      - En Windows/Linux: `Ctrl+Shift+P` o `F1`.
+      - En macOS: `Cmd+Shift+P` o `F1`.
+  2. Busca y selecciona `Tasks: Run Task`.
+  3. Elige la tarea `Local - Invocar Lambda`.
+  4. Selecciona el archivo de evento que quieres usar (por ejemplo, `cloudwatch-scheduled-event.json` o ingresa la ruta de tu archivo).
+  5. Revisa la salida en el panel de terminal.
+
+  Esto te permite invocar la función Lambda localmente sin escribir el comando manualmente, facilitando pruebas rápidas con diferentes eventos.
+
 - **Generar eventos de ejemplo:**
   ```bash
   # Ver todos los eventos disponibles
