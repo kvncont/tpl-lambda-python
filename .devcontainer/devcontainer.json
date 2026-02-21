@@ -72,6 +72,36 @@
         "inputs": []
       },
       "settings": {
+        "tasks": {
+          "version": "2.0.0",
+          "inputs": [
+            {
+              "id": "eventFile",
+              "type": "pickString",
+              "description": "Selecciona el archivo de evento para invocar la Lambda",
+              "options": [
+                "events/cloudwatch-scheduled-event.json"
+              ],
+              "default": "events/cloudwatch-scheduled-event.json"
+            }
+            
+          ],
+          "tasks": [
+            {
+              "label": "Local - Invocar Lambda",
+              "type": "shell",
+              "command": "sam local invoke LambdaFunction --event ${input:eventFile} | jq .",
+              "problemMatcher": [],
+              "group": "test",
+              "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+              }
+            }
+          ]
+        },
         "editor.bracketPairColorization.enabled": true,
         "editor.insertSpaces": true,
         "editor.detectIndentation": false,
