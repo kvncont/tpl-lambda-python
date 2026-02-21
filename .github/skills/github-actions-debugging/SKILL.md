@@ -1,7 +1,6 @@
-
+---
 name: github-actions-debugging
 description: Skill para debuggear workflows de GitHub Actions fallidos, especialmente CI/CD. Proporciona pasos, recomendaciones y ejemplos para identificar y solucionar errores en pipelines automatizados.
-
 ---
 
 # Debug de GitHub Actions (CI/CD)
