@@ -41,10 +41,19 @@ pip install -r requirements-dev.txt
 ### Comandos locales para desarrollo y pruebas
 
 - **Levantar la API en local:**
-  ```bash
-  sam local start-api
-  ```
-  Inicia un servidor local en http://localhost:3000 para probar los endpoints definidos en template.yml.
+
+    ```bash
+    sam local start-api
+    ```
+    Inicia un servidor local en http://localhost:3000 para probar los endpoints definidos en template.yml.
+
+    **O puedes usar el task de VS Code para levantar el API Gateway localmente:**
+    1. Abre la paleta de comandos:
+      - En Windows/Linux: `Ctrl+Shift+P` o `F1`.
+      - En macOS: `Cmd+Shift+P` o `F1`.
+    2. Busca y selecciona `Tasks: Run Task`.
+    3. Elige la tarea `Local - Iniciar API Gateway`.
+    4. El servidor local iniciará y podrás probar los endpoints en http://localhost:3000.
 
 - **Invocar la función Lambda en local:**
   ```bash
